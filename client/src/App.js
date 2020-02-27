@@ -3,9 +3,10 @@ import { Route } from "react-router-dom";
 import SavedList from "./Movies/SavedList";
 import MovieList from "./Movies/MovieList";
 import Movie from "./Movies/Movie";
+import MovieForm from './Movies/MovieForm';
 import axios from 'axios';
 
-const App = () => {
+const App = (props) => {
   const [savedList, setSavedList] = useState([]);
   const [movieList, setMovieList] = useState([]);
 
@@ -15,6 +16,19 @@ const App = () => {
       .then(res => setMovieList(res.data))
       .catch(err => console.log(err.response));
   };
+
+  const handleDelete = id => {
+    return axios.delete(`http://localhost:5000/api/movies/${id}`)
+      .then( res => console.log(res.data))
+      // .then( res => {
+      //   console.log('THis is the delete log', res.data)
+      //   const newarr = movie.filter(i => i.id !== movie)
+      //   setMovie(res.data);
+        props.history.push('/');
+        
+      // })
+      // .catch( err => console.log(err))
+  }
 
   const addToSavedList = movie => {
     setSavedList([...savedList, movie]);
@@ -31,10 +45,16 @@ const App = () => {
       <Route exact path="/">
         <MovieList movies={movieList} />
       </Route>
-
-      <Route path="/movies/:id">
-        <Movie addToSavedList={addToSavedList} />
-      </Route>
+      <Route 
+        path="/movies/:id" 
+        render={props => (<Movie {...props} addToSavedList={addToSavedList} handleDelete={handleDelete}/>
+        )}
+        />
+      <Route 
+        exact path="/update-movie/:id" 
+        render={props => (<MovieForm {...props} addToSavedList={addToSavedList} />
+        )}
+        />
     </>
   );
 };

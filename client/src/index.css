@@ -75,3 +75,98 @@ body {
   color: red;
   text-align: center;
 }
+
+form {
+  margin: 0 auto;
+  width: 300px;
+}
+
+input {
+  border: 0;
+  outline: none;
+}
+
+.baseline,
+input {
+  background-color: #fff;
+  font-size: 21px;
+  height: 50px;
+  width: 300px;
+  padding: 0 8px;
+  color: #1c5d76;
+}
+.baseline {
+  height: 3px;
+  background-color: #dcdcdc;
+}
+
+/* Hover.css > Underline From Left > Modfified */
+.baseline {
+  -webkit-transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  display: block;
+  /*display: inline-block;*/
+  overflow: hidden;
+  position: relative;
+  transform: perspective(1px) translateZ(0);
+  /* vertical-align: middle;*/
+}
+.baseline:before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 100%;
+  bottom: 0;
+  background: #1c5d76;
+  height: 4px;
+  -webkit-transition-property: right;
+  transition-property: right;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+.baseline:hover:before,
+.baseline:focus:before,
+.baseline:active:before {
+  right: 0;
+}
+
+/* Crucial style rule */
+input:focus + .baseline:before {
+  right: 0;
+}
+
+.form-button {
+  margin: 24px 0;
+}
+
+.update-button {
+  position: absolute;
+  top: 25px;
+  right: 170px;
+  border: 1px solid grey;
+  padding: 5px 10px;
+  background-color: lightseagreen;
+}
+.update-button:hover {
+  background-color: green;
+  color: white;
+}
+.delete-button {
+  position: absolute;
+  top: 25px;
+  right: 90px;
+  border: 1px solid grey;
+  padding: 5px 10px;
+  background-color: lightseagreen;
+}
+.delete-button:hover {
+  background-color: green;
+  color: white;
+}
+
+.updatemovie {
+  text-align: center;
+}
