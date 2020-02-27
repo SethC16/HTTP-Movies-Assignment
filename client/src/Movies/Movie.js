@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useRouteMatch } from 'react-router-dom';
 import MovieCard from './MovieCard';
 
-function Movie({addToSavedList, handleDelete, history}) {
+function Movie(props, {addToSavedList}) {
   const [movie, setMovie] = useState(null);
   const match = useRouteMatch();
 
@@ -24,10 +24,18 @@ function Movie({addToSavedList, handleDelete, history}) {
 
   const handleUpdate = e => {
     e.preventDefault();
-    history.push(`/update-movie/${movie.id}`)
-  }
+    props.history.push(`/update-movie/${movie.id}`)
+  };
 
-  
+  const handleDelete = id => {
+    axios.delete(`http://localhost:5000/api/movies/${movie.id}`)
+      .then( res => {
+        console.log('THis is the delete log', res.data)
+        props.getMovieList();
+        props.history.push('/')
+      })
+      .catch( err => console.log(err))
+  }
 
 
 
@@ -41,7 +49,7 @@ function Movie({addToSavedList, handleDelete, history}) {
       <div className='update-button' onClick={handleUpdate}>
         Update
       </div>
-      <div className='delete-button' onClick={() => handleDelete(movie.id)}>
+      <div className='delete-button' onClick={handleDelete}>
         Delete
       </div>
       <div className='save-button' onClick={saveMovie}>

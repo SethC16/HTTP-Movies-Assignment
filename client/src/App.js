@@ -17,18 +17,6 @@ const App = (props) => {
       .catch(err => console.log(err.response));
   };
 
-  const handleDelete = id => {
-    return axios.delete(`http://localhost:5000/api/movies/${id}`)
-      .then( res => console.log(res.data))
-      // .then( res => {
-      //   console.log('THis is the delete log', res.data)
-      //   const newarr = movie.filter(i => i.id !== movie)
-      //   setMovie(res.data);
-        props.history.push('/');
-        
-      // })
-      // .catch( err => console.log(err))
-  }
 
   const addToSavedList = movie => {
     setSavedList([...savedList, movie]);
@@ -47,12 +35,12 @@ const App = (props) => {
       </Route>
       <Route 
         path="/movies/:id" 
-        render={props => (<Movie {...props} addToSavedList={addToSavedList} handleDelete={handleDelete}/>
+        render={props => (<Movie {...props} addToSavedList={addToSavedList} getMovieList={getMovieList}/>
         )}
         />
       <Route 
         exact path="/update-movie/:id" 
-        render={props => (<MovieForm {...props} addToSavedList={addToSavedList} />
+        render={props => (<MovieForm {...props} addToSavedList={addToSavedList} getMovieList={getMovieList} movies={movieList} />
         )}
         />
     </>

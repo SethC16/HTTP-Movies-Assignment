@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -12,27 +12,39 @@ const initialItem = {
   };
 
 const MovieForm = (props) => {
-    const [movie, setMovie] = useState(initialItem);
-	// const { id } = useParams();
+    const [movieData, setMovieData] = useState(initialItem);
+	const { id } = useParams();
 	
 
-		useEffect(() => {
-			axios.get(`http://localhost:5000/api/movies/${props.match.params.id}`)
-		}, [props.match.params.id])
+	useEffect(() => {
+		const itemToUpdate = props.movies.find(movie => `${movie.id}` === id)
+
+        if (itemToUpdate) {
+            setMovieData(itemToUpdate)
+        }
+    }, [props.movies, id]);
 
 	const changeHandler = e => {
-		setMovie ({ ...movie, [e.target.name]: e.target.value}) 
+        e.persist();
+		setMovieData ({ ...movieData, [e.target.name]: e.target.value}) 
 	};
 
 	const handleSubmit = e => {
 		e.preventDefault();
 		// make a PUT request to edit the item
-		axios.put(`http://localhost:5000/api/movies/${movie.id}`, movie)
+		axios.put(`http://localhost:5000/api/movies/${movieData.id}`, movieData)
 			.then( res => {
-                props.setMovie(res.data);
-				props.history.push(`/movies/${movie.id}`);
+                props.getMovieList(res.data);
+				props.history.push(`/`);
 			})
-			.catch( err => console.log(err))
+            .catch( err => console.log(err));
+            setMovieData({
+                id: '',
+                title: '',
+                director: '',
+                metascore: '',
+                stars: []
+            })
 	};
 
 	return (
@@ -45,7 +57,7 @@ const MovieForm = (props) => {
 					name='title'
 					onChange={changeHandler}
 					placeholder="Title"
-					value={movie.title}
+					value={movieData.title}
 				/>
 				<div className="baseline" />
 
@@ -54,7 +66,7 @@ const MovieForm = (props) => {
 					name="director"
 					onChange={changeHandler}
 					placeholder="Director"
-					value={movie.director}
+					value={movieData.director}
 				/>
 				<div className="baseline" />
 
@@ -63,7 +75,7 @@ const MovieForm = (props) => {
 					name="metascore"
 					onChange={changeHandler}
 					placeholder="Metascore"
-					value={movie.metascore}
+					value={movieData.metascore}
 				/>
 				<div className="baseline" />
 
@@ -72,7 +84,7 @@ const MovieForm = (props) => {
 					name="stars"
 					onChange={changeHandler}
 					placeholder="Stars"
-					value={movie.stars}
+					value={movieData.stars}
 				/>
 				<div className="baseline" />
 
